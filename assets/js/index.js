@@ -52,7 +52,7 @@ const propiedadesJSON = [
 function templatePropiedades(propiedad) {
   let templateHTML = `
   <div class="propiedad">
-      <!-- <div class="img" style="background-image: url('${propiedad.src}')"></div>
+      <div class="img" style="background-image: url('${propiedad.src}')"></div>
       <section>
           <h5>${propiedad.name}</h5>
           <div class="d-flex justify-content-between">
