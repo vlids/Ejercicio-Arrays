@@ -49,53 +49,62 @@ const propiedadesJSON = [
   }
 ];
 
+function templatePropiedades(propiedad) {
+  let templateHTML = `
+  <div class="propiedad">
+      <!-- <div class="img" style="background-image: url('${propiedad.src}')"></div>
+      <section>
+          <h5>${propiedad.name}</h5>
+          <div class="d-flex justify-content-between">
+              <p>Cuartos: ${propiedad.rooms}</p>
+              <p>Metros: ${propiedad.m}</p>
+          </div>
+          <p class="my-3">${propiedad.description}</p>
+          <button class="btn btn-info ">Ver más</button>
+      </section> 
+    </div>
+  `;
 
-let buscador = document.querySelector('#boton');
-let totalPropiedades = document.querySelector('#Propiedades span');
-let resultadoPropiedades = document.querySelector('.propiedades');
-
-
-buscador.addEventListener('click', function() {
-
-  let dormitorios = document.querySelector('#numCuartos')
-  let metrosMin = document.querySelector('#minMetros')
-  let metrosMax = document.querySelector('#maxMetros')
-
-  
-  if (dormitorios > 0 && metrosMin > 0 && metrosMax > 0){
-    const filtroViviendas = propiedadesJSON.filter ((filtro) =>
-      (dormitorios === filtro.rooms && metrosMin <= filtro.m && metrosMax >= filtro.m)
-    );
-  detalleCasas(filtroViviendas)
-  } else {
-  alert('Faltan campos por llenar')
-  }
-});
-
-
-function detalleCasas(listaPropiedades = viviendas) {
-  let misPropiedades = ''
-
-  for (let propiedadFiltrada of listaPropiedades) {
-    let templatePropiedades = `
-    <div class="propiedad">
-    <div class="img" style="background-image: url('${propiedadFiltrada.src}')"></div>
-    <section>
-        <h5>${propiedadFiltrada.name}</h5>
-        <div class="d-flex justify-content-between">
-            <p>Cuartos:${propiedadFiltrada.rooms}</p>
-            <p>Metros:${propiedadFiltrada.m}</p>
-        </div>
-        <p class="my-3">${propiedadFiltrada.description}</p>
-        <button class="btn btn-info ">Ver más</button>
-    </section>
-</div>
-   `;
-    misPropiedades += templatePropiedades;
-  }
-  resultadoPropiedades.innerHTML = templatePropiedades;
+  return templateHTML;
 }
 
+function filtrarPropiedades() {
+  const cantidadCuartos = document.querySelector('#numCuartos').value;
+  const metrosMinimo = document.querySelector('#minMetros').value;
+  const metrosMaximo = document.querySelector('#maxMetros').value;
+
+  if (cantidadCuartos == '' || metrosMinimo == '' || metrosMaximo == '') {
+    alert('Faltan datos por ingresar')
+  } else {
+    let htmlFiltrado = '';
+    let cantidadCasas = 0;
+    for (let propiedad of propiedadesJSON) {
+      if (cantidadCuartos == propiedad.rooms && (propiedad.m >= metrosMinimo && propiedad.m <= metrosMaximo)
+      ){
+
+        htmlFiltrado += templatePropiedades(propiedad);
+        cantidadCasas++;
+
+      }
+    }
+    const propiedadesCard = document.querySelector('.propiedades');
+    const totalElementos = document.querySelector('#totalElementos');
+    
+    propiedadesCard.innerHTML = htmlFiltrado;
+    totalElementos.innerHTML = cantidadCasas;
+  }
+}
+
+//  Tarjetas sin filtrar
+let tarjetasHTML = '';
+for(let propiedad of propiedadesJSON){
+  tarjetasHTML += templatePropiedades(propiedad);
+}
+
+const propiedadesCard = document.querySelector('.propiedades');
+const totalElementos = document.querySelector('#totalElementos');
+propiedadesCard.innerHTML = tarjetasHTML;
+totalElementos.innerHTML = propiedadesJSON.length;
 
 
 
